@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package echo;
+
+import "google/protobuf/descriptor.proto";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/sivchari/protoc-gen-description/gen/proto/v1;protov1";
+
+message Description {
+  string description = 1;
+}
+
+extend google.protobuf.FieldOptions {
+  Description description = 50000;
+}
+
+message EchoRequest {
+  string message = 1 [(description) = {description: "Message to echo"}];
+}
+
+message EchoResponse {
+  string message = 1 [(description) = {description: "Echoed message"}];
+}
+
+service EchoService {
+  rpc Echo(EchoRequest) returns (EchoResponse) {
+    option (google.api.http) = {
+      post: "/v1/echo"
+      body: "*"
+    };
+  }
+}
